@@ -1,35 +1,62 @@
 ---
-title: Markdown Mystery Tour
-publishDate: 2020-03-02 00:00:00
-img: /assets/stock-1.jpg
-img_alt: Iridescent ripples of a bright blue and pink liquid
+title: Pojet IOT
+publishDate: 06-01-2023 00:00:00
+img: /assets/IOT.PNG
+img_alt: Dashboard
 description: |
-  We designed a whodunnit-style game to introduce Markdown formatting. Suspense — suspicion — syntax!
+  Cette application Flask a pour but de recevoir des données provenant de capteurs d'humidité et de température via des requêtes HTTP POST, puis écrit ces données dans une base de données InfluxDB.
 tags:
-  - Design
-  - Dev
-  - User Testing
+  - Python
+  - Capteur
+  - API
 ---
 
-## Level-two heading
+# Capteurs d'humidité et de température
 
-> Tell me and I forget. Teach me and I remember. Involve me and I learn.
+Application Flask qui permet de recevoir des données de capteurs d'humidité et de température via des requêtes HTTP POST, puis de les écrire dans une base de données InfluxDB.
 
-Lorem ipsum dolor sit amet, <a href="https://astro.build/">Astro</a> makes people happy. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Proin nibh nisl condimentum id venenatis a condimentum vitae. Dapibus ultrices in iaculis nunc. Arcu odio ut sem nulla pharetra diam sit amet. Diam quis enim lobortis scelerisque fermentum dui faucibus in ornare.
+## Routes de l'API
 
-Arcu dui vivamus arcu felis bibendum ut tristique et egestas. Eget gravida cum sociis natoque penatibus. Cras fermentum odio eu feugiat pretium nibh. Proin nibh nisl condimentum id venenatis. Porta nibh venenatis cras sed felis eget velit. Id diam vel quam elementum pulvinar etiam non.
+Cette route est utilisée pour recevoir les données d'humidité des capteurs.
 
-### Level-three heading
+- Méthode HTTP : POST
+- URL : `/api/humidity`
 
-Ultrices tincidunt arcu non sodales neque sodales ut. Sed enim ut sem viverra aliquet eget sit amet. Lacus luctus accumsan tortor posuere ac ut consequat semper viverra. Viverra accumsan in nisl nisi scelerisque eu ultrices. In massa tempor nec feugiat nisl pretium fusce.
+Le traitement des données se fait comme suit :
 
-### Level-three heading
+1. Récupérer les données de la requête via `request.data`.
+2. Extraire la valeur de la charge utile (payload) des données reçues.
+3. Convertir la charge utile de l'héxadécimal en décimal.
+4. Diviser la valeur obtenue par 10 pour obtenir la valeur réelle de l'humidité.
+5. Appeler la fonction `writes` pour écrire les données d'humidité dans la base de données InfluxDB.
+6. Retourner les données de la requête.
 
-Sed pulvinar porttitor mi in ultricies. Etiam non dolor gravida eros pulvinar pellentesque et dictum ex. Proin eu ornare ligula, sed condimentum dui. Vivamus tincidunt tellus mi, sed semper ipsum pharetra a. Suspendisse sollicitudin at sapien nec volutpat. Etiam justo urna, laoreet ac lacus sed, ultricies facilisis dolor. Integer posuere, metus vel viverra gravida, risus elit ornare magna, id feugiat erat risus ullamcorper libero. Proin vitae diam auctor, laoreet lorem vitae, varius tellus.
 
-Aenean pretium purus augue, ut bibendum erat convallis quis. Cras condimentum quis velit ac mollis. Suspendisse non purus fringilla, venenatis nisl porta, finibus odio. Curabitur aliquet metus faucibus libero interdum euismod. Morbi sed magna nisl. Morbi odio nibh, facilisis vel sapien eu, tempus tincidunt erat. Nullam erat velit, sagittis at purus quis, tristique scelerisque tortor. Pellentesque lacinia tortor id est aliquam viverra. Vestibulum et diam ac ipsum mollis fringilla.
+Cette route est utilisée pour recevoir les données de température des capteurs.
 
-#### Level-four heading
+- Méthode HTTP : POST
+- URL : `/api/temperature`
 
-- We noted this
-- And also this other point
+Le traitement des données est similaire à celui de la route `/api/humidity`, mais concerne les données de température.
+
+## Fonction `writes`
+
+La fonction `writes` est utilisée pour écrire les données dans la base de données InfluxDB.
+
+- Paramètres :
+  - `name` : Le nom de la mesure (humidité ou température).
+  - `value` : La valeur de la mesure.
+
+Les étapes de la fonction sont les suivantes :
+
+1. Définition des détails de connexion à InfluxDB (URL, jeton, organisation).
+2. Création d'un client InfluxDB et d'une API d'écriture en utilisant les détails de connexion.
+3. Création d'un point de données avec le nom et la valeur fournis.
+4. Utilisation de l'API d'écriture pour écrire le point de données dans la base de données.
+
+---
+## Conclusion
+
+En utilisant ce code, vous pouvez mettre en place un service web qui collecte et enregistre les données provenant de capteurs d'humidité et de température dans une base de données InfluxDB. Cela vous permet de stocker ces données et de les analyser ultérieurement.
+
+---
